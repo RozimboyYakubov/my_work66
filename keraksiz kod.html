@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Stol va Kassa</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f3f6fa;
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        .mainbox {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .form-wrap {
+            background: #fff;
+            padding: 30px 40px;
+            border-radius: 18px;
+            box-shadow: 0 6px 24px 0 #c7d0e6;
+            margin-bottom: 40px;
+            min-width: 340px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .form-title {
+            font-size: 1.4em;
+            color: #222;
+            margin-bottom: 10px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .form-wrap input {
+            font-size: 1.1rem;
+            padding: 13px 13px;
+            border-radius: 9px;
+            border: none;
+            background: #f9fbfd;
+            transition: 0.2s;
+            outline: none;
+            width: 170px;
+            box-shadow: none;
+        }
+
+        .form-wrap input:focus {
+            border-color: #3654b3;
+            background: #eef3fc;
+        }
+
+        .form-wrap button {
+            background: linear-gradient(90deg, #3654b3, #5a81e6);
+            color: #fff;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.12rem;
+            cursor: pointer;
+            padding: 12px 0;
+            width: 100%;
+            transition: 0.2s;
+            margin-bottom: 0;
+        }
+
+        .form-wrap button:hover {
+            opacity: 0.93;
+            transform: translateY(-2px) scale(1.03);
+        }
+
+        .alert {
+            color: #e32d2d;
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 1.08em;
+            text-align: center;
+            min-height: 24px;
+        }
+
+        .summa {
+            font-size: 1.35em;
+            color: #3654b3;
+            font-weight: 700;
+            margin: 30px 0 0 0;
+            background: #e7eef7;
+            padding: 15px 55px;
+            border-radius: 12px;
+            letter-spacing: 1px;
+            text-align: center;
+            box-shadow: 0 2px 10px #e2e8f4;
+        }
+
+        .tablebox {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        table.stol-table {
+            border-collapse: collapse;
+            min-width: 70vw;
+            background: #fff;
+            box-shadow: 0 3px 16px 0 #d5dae6;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        table.stol-table th,
+        table.stol-table td {
+            padding: 12px 18px;
+            border: 1px solid #b9c7d7;
+            font-size: 1.08rem;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        table.stol-table th {
+            background: #e7eef7;
+            color: #3654b3;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .btn-action {
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 1.1em;
+            margin: 0 4px;
+        }
+
+        .btn-edit {
+            color: #ffa600;
+        }
+
+        .btn-delete {
+            color: #e32d2d;
+        }
+
+        .btn-kassa {
+            background: linear-gradient(90deg, #ffd600, #ffe46b);
+            color: #4a3900;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.12rem;
+            cursor: pointer;
+            padding: 5px 15px;
+            transition: 0.18s;
+            box-shadow: 0 1px 8px #e5e1ab;
+            margin-left: 2px;
+        }
+
+        .btn-kassa:hover {
+            opacity: 0.95;
+            transform: scale(1.06);
+        }
+
+        .kassa-box {
+            display: none;
+            margin-top: 32px;
+            background: #fffbe3;
+            border: 2px solid #ffd600;
+            border-radius: 14px;
+            padding: 30px 40px;
+            box-shadow: 0 4px 18px #e5e1ab;
+            min-width: 400px;
+            font-size: 1.15em;
+        }
+
+        .chek-box {
+            background: #fff;
+            border: 1px dashed #bbb53a;
+            border-radius: 10px;
+            padding: 20px 30px;
+            margin-top: 20px;
+            width: max-content;
+        }
+
+        .chek-title {
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.22em;
+            color: #222;
+            margin-bottom: 10px;
+        }
+
+        .chek-table {
+            width: 100%;
+            margin-top: 8px;
+        }
+
+        .chek-table th,
+        .chek-table td {
+            padding: 5px 8px;
+            text-align: left;
+            font-size: 1em;
+            border: none;
+        }
+
+        .chek-table th {
+            color: #555;
+        }
+
+        .chek-sum {
+            font-weight: bold;
+            font-size: 1.08em;
+        }
+
+        @media (max-width: 800px) {
+
+            .form-wrap,
+            .kassa-box {
+                min-width: unset;
+                padding: 20px 4vw;
+            }
+
+            table.stol-table {
+                min-width: 96vw;
+                font-size: 0.96em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="mainbox">
+        <div class="form-wrap">
+            <div class="form-title">Stolga Mahsulot Qoshish</div>
+            <form id="tableForm" autocomplete="off">
+                <div class="input-row">
+                    <input id="prodName" type="text" placeholder="Mahsulot nomi (bir nechta, probel bilan)"
+                        autocomplete="off">
+                </div>
+                <div class="input-row">
+                    <input id="prodAmount" type="text" placeholder="Miqdor(kg)lar: 3 5 2 ..." autocomplete="off">
+                </div>
+                <div class="input-row">
+                    <input id="prodPrice" type="text" placeholder="Narxi: 60000 70000 ..." autocomplete="off">
+                </div>
+                <button type="submit">Stolga Qoshish</button>
+            </form>
+            <div class="alert" id="alert"></div>
+        </div>
+        <div class="tablebox">
+            <table class="stol-table">
+                <thead>
+
+                    <tr>
+                        <th>Nomi</th>
+                        <th>Miqdori</th>
+                        <th>Narxi</th>
+                        <th>Jami</th>
+                        <th>Amallar</th>
+                    </tr>
+                </thead>
+                <tbody id="oneRowTable"></tbody>
+            </table>
+        </div>
+        <div class="summa" id="totalSumma">Jami summa: 0 so'm</div>
+        <!-- Kassa bo'limi -->
+        <div class="kassa-box" id="kassaBox">
+            <h3>Kassa Qismi</h3>
+            <label>Stol raqami: <input type="text" id="stolRaqami"
+                    style="width:60px; font-size:1.1em; padding:4px 7px; border-radius:7px; border:1px solid #b9c7d7; margin-left:6px;"></label>
+            <table class="kassa-table" style="margin-top:20px;">
+                <thead>
+                    <tr>
+                        <th>Nomi</th>
+                        <th>Miqdori (kg)</th>
+                        <th>1kg narxi</th>
+                        <th>Jami</th>
+                    </tr>
+                </thead>
+                <tbody id="kassaOneRow"></tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4" id="kassaRoyxat" style="font-size:0.97em; color:#888; padding-top:8px;"></td>
+                    </tr>
+                </tfoot>
+            </table>
+            <div class="summa" style="background:#fffbe3;color:#665200;" id="kassaSumma"></div>
+            <button id="chekChiqarishBtn"
+                style="margin-top:18px; background:#ffd600; color:#4a3900; border-radius:8px; border:none; font-size:1.1em; font-weight:bold; padding:10px 30px; cursor:pointer;">Chek
+                chiqarish</button>
+            <div id="chekDiv"></div>
+        </div>
+    </div>
+
+    <script>
+        // --- Mahsulotlar bazasi ---
+        function getProducts() { return JSON.parse(localStorage.getItem("products") || "[]"); }
+        function saveProducts(p) { localStorage.setItem("products", JSON.stringify(p)); }
+
+        // --- Stol uchun jadval (SESSION STORAGE, page reloadda OCHMASIN!) ---
+        function getTable() { return JSON.parse(sessionStorage.getItem("table") || "[]"); }
+        function saveTable(t) { sessionStorage.setItem("table", JSON.stringify(t)); }
+
+        // --- Kassa uchun jadval (SESSION STORAGE) ---
+        function getKassa() { return JSON.parse(sessionStorage.getItem("kassa") || "[]"); }
+        function saveKassa(t) { sessionStorage.setItem("kassa", JSON.stringify(t)); }
+
+        // --- Autocomplete (nomlar) ---
+        function autocomplete(inp, arr) {
+            let currentFocus;
+            inp.addEventListener("input", function (e) {
+                let a, b, i, val = this.value.split(" ").pop();
+                closeAllLists();
+                if (!val) return false;
+                currentFocus = -1;
+                a = document.createElement("DIV");
+                a.setAttribute("id", this.id + "autocomplete-list");
+                a.setAttribute("class", "autocomplete-items");
+                a.setAttribute("style", "position:absolute;left:0;right:0;z-index:999;background:#fff;border:1px solid #b9c7d7;border-top:none;border-radius:0 0 10px 10px;");
+                this.parentNode.appendChild(a);
+                for (i = 0; i < arr.length; i++) {
+                    if (arr[i].substr(0, val.length).toLowerCase() === val.toLowerCase()) {
+                        b = document.createElement("DIV");
+                        b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>" + arr[i].substr(val.length);
+                        b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+                        b.addEventListener("click", function (e) {
+                            let parts = inp.value.split(" ");
+                            parts[parts.length - 1] = this.getElementsByTagName("input")[0].value;
+                            inp.value = parts.join(" ") + " ";
+                            closeAllLists();
+                        });
+                        a.appendChild(b);
+                    }
+                }
+            });
+            inp.addEventListener("keydown", function (e) {
+                let x = document.getElementById(this.id + "autocomplete-list");
+                if (x) x = x.getElementsByTagName("div");
+                if (e.keyCode == 40) {
+                    currentFocus++;
+                    addActive(x);
+                } else if (e.keyCode == 38) {
+                    currentFocus--;
+                    addActive(x);
+                } else if (e.keyCode == 13) {
+                    e.preventDefault();
+                    if (currentFocus > -1) if (x) x[currentFocus].click();
+                }
+            });
+            function addActive(x) {
+                if (!x) return false;
+                removeActive(x);
+                if (currentFocus >= x.length) currentFocus = 0;
+                if (currentFocus < 0) currentFocus = (x.length - 1);
+                x[currentFocus].classList.add("autocomplete-active");
+                x[currentFocus].style.background = "#e7eef7";
+            }
+            function removeActive(x) {
+                for (let i = 0; i < x.length; i++) x[i].classList.remove("autocomplete-active");
+            }
+            function closeAllLists(elmnt) {
+                let x = document.getElementsByClassName("autocomplete-items");
+                for (let i = 0; i < x.length; i++)
+                    if (elmnt != x[i] && elmnt != inp) x[i].parentNode.removeChild(x[i]);
+            }
+            document.addEventListener("click", function (e) { closeAllLists(e.target); });
+        }
+
+        // --- Jadvalning BIRINCHI qatori (tr) - barcha mahsulotlarni + bilan birga yozish ---
+        function renderTable() {
+            const table = getTable();
+            const tbody = document.getElementById("oneRowTable");
+            tbody.innerHTML = "";
+            let total = 0;
+            if (table.length) {
+                // Nomi ustuni
+                let nomi = table.map(item => `<span style="font-weight:bold;color:#3654b3;">${item.name}</span>`).join(' + ');
+                // Miqdori ustuni (faqat 4 kg + 2 kg + 5 kg ko‘rinishida bo‘ladi)
+                let miqdori = table.map(item => `${item.amount} kg`).join(' + ');
+                // Narxi ustuni
+                let narxi = table.map(item => `${item.price} so'm`).join(' + ');
+                // Jami ustuni
+                let jami = table.map(item => {
+                    total += item.amount * item.price;
+                    return `${item.amount * item.price} so'm`
+                }).join(' + ');
+                // Amallar ustuni
+                let amallar = table.map((item, idx) =>
+                    `<button class="btn-action btn-edit" title="Tahrirlash" data-idx="${idx}">&#9998;</button>
+                     <button class="btn-action btn-delete" title="O'chirish" data-idx="${idx}">&#128465;</button>
+                     <button class="btn-kassa" title="Kassaga qo‘shish" data-idx="${idx}">&#128722;</button>`
+                ).join(' ');
+                tbody.innerHTML = `<tr>
+                    <td>${nomi}</td>
+                    <td>${miqdori}</td>
+                    <td>${narxi}</td>
+                    <td>${jami}</td>
+                    <td>${amallar}</td>
+                </tr>`;
+            }
+            document.getElementById("totalSumma").innerText = "Jami summa: " + total + " so'm";
+        }
+
+        // --- Forma ishlashi ---
+        document.getElementById("tableForm").onsubmit = function (e) {
+            e.preventDefault();
+            let alert = document.getElementById("alert");
+            alert.innerText = "";
+            let names = document.getElementById("prodName").value.trim().split(/\s+/);
+            let amounts = document.getElementById("prodAmount").value.trim().split(/\s+/).map(Number);
+            let prices = document.getElementById("prodPrice").value.trim().split(/\s+/).map(Number);
+            if (names.length != amounts.length || names.length != prices.length) {
+                alert.innerText = "Qatorlar soni bir xil bo‘lishi kerak!";
+                return;
+            }
+            let products = getProducts();
+            let table = getTable();
+            for (let i = 0; i < names.length; i++) {
+                let idx = products.findIndex(p => p.name.toLowerCase() === names[i].toLowerCase());
+                if (idx === -1) {
+                    alert.innerText = `'${names[i]}' mahsuloti bazada yo‘q!`;
+                    return;
+                }
+                if (products[idx].amount < amounts[i]) {
+                    alert.innerText = `'${names[i]}' uchun omborda yetarli mahsulot yo‘q!`;
+                    return;
+                }
+            }
+            for (let i = 0; i < names.length; i++) {
+                let idx = products.findIndex(p => p.name.toLowerCase() === names[i].toLowerCase());
+                products[idx].amount -= amounts[i];
+                let tableIdx = table.findIndex(t => t.name.toLowerCase() === names[i].toLowerCase() && t.price === prices[i]);
+                if (tableIdx !== -1) {
+                    table[tableIdx].amount += amounts[i];
+                } else {
+                    table.push({ name: names[i], amount: amounts[i], price: prices[i] });
+                }
+            }
+            saveProducts(products);
+            saveTable(table);
+            renderTable();
+            this.reset();
+        };
+
+        // --- Stol jadvalidagi amallar va kassaga qo‘shish ---
+        document.getElementById("oneRowTable").addEventListener("click", function (e) {
+            let table = getTable();
+            let products = getProducts();
+            let idx = e.target.dataset.idx;
+            if (typeof idx === "undefined") return;
+            idx = Number(idx);
+            if (e.target.classList.contains('btn-plus')) {
+                let productIdx = products.findIndex(p => p.name.toLowerCase() === table[idx].name.toLowerCase());
+                if (products[productIdx].amount < 1) {
+                    alert('Omborda yetarli mahsulot yo‘q!');
+                    return;
+                }
+                products[productIdx].amount -= 1;
+                table[idx].amount += 1;
+                saveProducts(products);
+                saveTable(table);
+                renderTable();
+            }
+            if (e.target.classList.contains('btn-minus')) {
+                if (table[idx].amount > 1) {
+                    let productIdx = products.findIndex(p => p.name.toLowerCase() === table[idx].name.toLowerCase());
+                    products[productIdx].amount += 1;
+                    table[idx].amount -= 1;
+                    saveProducts(products);
+                    saveTable(table);
+                    renderTable();
+                }
+            }
+            if (e.target.classList.contains('btn-delete')) {
+                let productIdx = products.findIndex(p => p.name.toLowerCase() === table[idx].name.toLowerCase());
+                products[productIdx].amount += table[idx].amount;
+                table.splice(idx, 1);
+                saveProducts(products);
+                saveTable(table);
+                renderTable();
+            }
+            if (e.target.classList.contains('btn-edit')) {
+                let yangiMiqdor = prompt("Yangi miqdor (kg):", table[idx].amount);
+                if (yangiMiqdor !== null && yangiMiqdor !== "" && !isNaN(Number(yangiMiqdor))) {
+                    yangiMiqdor = Number(yangiMiqdor);
+                    let productIdx = products.findIndex(p => p.name.toLowerCase() === table[idx].name.toLowerCase());
+                    let omborQoldiq = products[productIdx].amount + table[idx].amount;
+                    if (yangiMiqdor > omborQoldiq) {
+                        alert("Omborda yetarli mahsulot yo‘q!");
+                        return;
+                    }
+                    products[productIdx].amount = omborQoldiq - yangiMiqdor;
+                    table[idx].amount = yangiMiqdor;
+                    saveProducts(products);
+                    saveTable(table);
+                    renderTable();
+                }
+            }
+            if (e.target.classList.contains('btn-kassa')) {
+                let kassa = getKassa();
+                let kassaIdx = kassa.findIndex(k => k.name === table[idx].name && k.price === table[idx].price);
+                if (kassaIdx !== -1) {
+                    kassa[kassaIdx].amount += table[idx].amount;
+                } else {
+                    kassa.push({ ...table[idx] });
+                }
+                saveKassa(kassa);
+                table.splice(idx, 1);
+                saveTable(table);
+                renderTable();
+                showKassa();
+            }
+        });
+
+        // --- Kassa bo‘limi (o'zgarmagan) ---
+        function showKassa() {
+            let kassaBox = document.getElementById("kassaBox");
+            let kassa = getKassa();
+            let tbody = document.getElementById("kassaOneRow");
+            let kassaSum = 0;
+            tbody.innerHTML = '';
+            kassa.forEach((item, idx) => {
+                let jami = item.amount * item.price;
+                kassaSum += jami;
+                tbody.innerHTML += `<tr>
+                    <td>${item.name}</td>
+                    <td>${item.amount} kg</td>
+                    <td>${item.price} so'm</td>
+                    <td>${jami} so'm</td>
+                </tr>`;
+            });
+            document.getElementById("kassaSumma").innerText = "Jami summa: " + kassaSum + " so'm";
+            let royxat = '';
+            kassa.forEach((item, idx) => {
+                royxat += (idx ? ' | ' : '') + `${item.name} (${item.amount} kg, ${item.price} so'm, jami: ${item.amount * item.price} so'm)`;
+            });
+            document.getElementById("kassaRoyxat").innerText = kassa.length ? "Mahsulotlar: " + royxat : "";
+            kassaBox.style.display = kassa.length ? 'block' : 'none';
+            if (!kassa.length) document.getElementById("chekDiv").innerHTML = "";
+        }
+
+        // --- Chek chiqarish va kassani tozalash ---
+        document.getElementById("chekChiqarishBtn").onclick = function () {
+            let stolraqami = document.getElementById("stolRaqami").value.trim();
+            let kassa = getKassa();
+            if (!stolraqami) {
+                alert("Stol raqamini kiriting!");
+                return;
+            }
+            if (kassa.length === 0) {
+                alert("Kassada mahsulot yo‘q!");
+                return;
+            }
+            let jami = 0;
+            let rows = "";
+            kassa.forEach(item => {
+                let sum = item.amount * item.price;
+                jami += sum;
+                rows += `<tr>
+                    <td>${item.name}</td>
+                    <td>${item.amount} kg</td>
+                    <td>${item.price} so'm</td>
+                    <td>${sum} so'm</td>
+                </tr>`;
+            });
+            document.getElementById("chekDiv").innerHTML = `
+              <div class="chek-box">
+                <div class="chek-title">Chek: Stol №${stolraqami}</div>
+                <table class="chek-table">
+                  <thead>
+                    <tr><th>Nomi</th><th>Miqdori</th><th>1kg narxi</th><th>Jami</th></tr>
+                  </thead>
+                  <tbody>${rows}</tbody>
+                </table>
+                <div class="chek-sum">Jami: ${jami} so'm</div>
+              </div>
+            `;
+            saveKassa([]);
+            showKassa();
+        };
+
+        let productNames = getProducts().map(p => p.name);
+        autocomplete(document.getElementById("prodName"), productNames);
+
+        renderTable();
+        showKassa();
+    </script>
+</body>
+
+</html>
